@@ -86,6 +86,7 @@ export interface IExtra {
   minSizeBytes: number
   maxSizeBytes: number
   maxFiles: number
+  generatePreviewWaitTime: number
 }
 
 export interface IUploadParams {
@@ -204,6 +205,7 @@ export interface IDropzoneProps {
   minSizeBytes: number
   maxSizeBytes: number
   maxFiles: number
+  generatePreviewWaitTime: number
 
   validate?(file: IFileWithMeta): any // usually a string, but can be anything
 
@@ -443,6 +445,7 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
       meta: { type },
       file,
     } = fileWithMeta
+    const { generatePreviewWaitTime } = this.props
     const isImage = type.startsWith('image/')
     const isAudio = type.startsWith('audio/')
     const isVideo = type.startsWith('video/')
@@ -457,7 +460,7 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
           else fileObj.onloadedmetadata = resolve
         }),
         new Promise((_, reject) => {
-          setTimeout(reject, 1000)
+          setTimeout(reject, generatePreviewWaitTime)
         }),
       ])
     }
@@ -570,6 +573,7 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
       maxFiles,
       minSizeBytes,
       maxSizeBytes,
+      generatePreviewWaitTime,
       onSubmit,
       getUploadParams,
       disabled,
@@ -592,7 +596,17 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
     const { active, dragged } = this.state
 
     const reject = dragged.some(file => file.type !== 'application/x-moz-file' && !accepts(file as File, accept))
-    const extra = { active, reject, dragged, accept, multiple, minSizeBytes, maxSizeBytes, maxFiles } as IExtra
+    const extra = {
+      active,
+      reject,
+      dragged,
+      accept,
+      multiple,
+      minSizeBytes,
+      maxSizeBytes,
+      maxFiles,
+      generatePreviewWaitTime,
+    } as IExtra
     const files = [...this.files]
     const dropzoneDisabled = resolveValue(disabled, files, extra)
 
@@ -742,6 +756,7 @@ Dropzone.defaultProps = {
   minSizeBytes: 0,
   maxSizeBytes: Number.MAX_SAFE_INTEGER,
   maxFiles: Number.MAX_SAFE_INTEGER,
+  generatePreviewWaitTime: 1000,
   autoUpload: true,
   disabled: false,
   canCancel: true,
@@ -770,6 +785,7 @@ Dropzone.propTypes = {
   minSizeBytes: PropTypes.number.isRequired,
   maxSizeBytes: PropTypes.number.isRequired,
   maxFiles: PropTypes.number.isRequired,
+  generatePreviewWaitTime: PropTypes.number.isRequired,
 
   validate: PropTypes.func,
 
