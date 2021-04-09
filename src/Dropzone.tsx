@@ -74,6 +74,7 @@ export interface IFileWithMeta {
   cancel: () => void
   restart: () => void
   remove: () => void
+  refresh: () => void
   xhr?: XMLHttpRequest
 }
 
@@ -119,6 +120,7 @@ export interface IExtraLayout extends IExtra {
   onCancelFile(file: IFileWithMeta): void
   onRemoveFile(file: IFileWithMeta): void
   onRestartFile(file: IFileWithMeta): void
+  onRefreshFile(file: IFileWithMeta): void
 }
 
 export interface ILayoutProps {
@@ -366,6 +368,11 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
     this.uploadFile(fileWithMeta)
   }
 
+  handleRefresh = (fileWithMeta: IFileWithMeta) => {
+    this.handleChangeStatus(fileWithMeta)
+    this.forceUpdate()
+  }
+
   // expects an array of File objects
   handleFiles = (files: File[]) => {
     files.forEach((f, i) => this.handleFile(f, `${new Date().getTime()}-${i}`))
@@ -400,6 +407,7 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
     fileWithMeta.cancel = () => this.handleCancel(fileWithMeta)
     fileWithMeta.remove = () => this.handleRemove(fileWithMeta)
     fileWithMeta.restart = () => this.handleRestart(fileWithMeta)
+    fileWithMeta.refresh = () => this.handleRefresh(fileWithMeta)
 
     fileWithMeta.meta.status = 'preparing'
     this.files.push(fileWithMeta)
@@ -743,6 +751,7 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
             onCancelFile: this.handleCancel,
             onRemoveFile: this.handleRemove,
             onRestartFile: this.handleRestart,
+            onRefreshFile: this.handleRefresh,
           } as IExtraLayout
         }
       />

@@ -1,6 +1,6 @@
 {
-  "name": "react-dropzone-uploader",
-  "version": "2.11.0",
+  "name": "@damiqib/react-dropzone-uploader",
+  "version": "2.11.3",
   "author": "Kyle Bebak <kylebebak@gmail.com>",
   "description": "React file dropzone and uploader: fully customizable, progress indicators, upload cancellation and restart, zero deps and excellent TypeScript support",
   "main": "./dist/react-dropzone-uploader.js",
@@ -19,13 +19,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/fortana-co/react-dropzone-uploader.git"
+    "url": "git://github.com/damiqib/react-dropzone-uploader.git"
   },
   "license": "MIT",
   "peerDependencies": {
+    "prop-types": ">=15.5.10",
     "react": ">=16.2.0",
-    "react-dom": ">=16.2.0",
-    "prop-types": ">=15.5.10"
+    "react-dom": ">=16.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
